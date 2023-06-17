@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 const DetailsPage = ({ pokemon, onBookmark }) => {
+  console.log(pokemon);
   const [bookmarked, setBookmarked] = useState(false);
 
   const handleBookmark = () => {
@@ -9,14 +10,14 @@ const DetailsPage = ({ pokemon, onBookmark }) => {
   };
 
   return (
-    <div>
+    (JSON.stringify(pokemon) !== '{}') ? (
+      <div>
       <h2>{pokemon.name}</h2>
-      <img src={pokemon.image} alt={pokemon.name} />
-      {/* Display other details */}
-      <button onClick={handleBookmark}>
-        {bookmarked ? 'Remove Bookmark' : 'Bookmark'}
-      </button>
+      <img src={pokemon.sprites.front_default} alt={pokemon.name} />
     </div>
+    ) : (
+      <></>
+    )
   );
 };
 

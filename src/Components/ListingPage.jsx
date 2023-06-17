@@ -1,12 +1,82 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-const ListingPage = ({ pokemonList, onLoadMore }) => {
+const ListingPage = () => {
+  const [pokemonList, setPokemonList] = useState([]);
+  const [offset, setOffset] = useState(0);
+  const handleLoadMore = () => {
+    setOffset((prev) => prev + 10);
+    handleListingLoad();
+    // Implement logic to load more Pokemon using API
+  };
+
   const handleScroll = () => {
     const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
     if (scrollTop + clientHeight >= scrollHeight - 10) {
-      onLoadMore();
+      handleLoadMore();
     }
   };
+
+  const fetchNextPokemonDetails = (urls, data) => {
+    Promise.all(urls.map((url) => fetch(url).then((response) => response.json())))
+      .then((pokemonData) => {
+        setPokemonList([...pokemonList, ...pokemonData]);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleListingLoad = () => {
+    // setSearching(true);
+    fetch(`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${offset}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // setSearching(false);
+        const pokemonUrls = data.results.map((entry) => entry.url);
+        fetchNextPokemonDetails(pokemonUrls, '');
+      })
+      .catch((error) => {
+        // setSearching(false);
+        console.error(error);
+      });
+  };
+
+  const fetchPokemonDetails = (urls, data) => {
+    Promise.all(urls.map((url) => fetch(url).then((response) => response.json())))
+      .then((pokemonData) => {
+        if (data !== '') {
+          pokemonData = pokemonData.filter((value) => value.name !== data.name);
+          setPokemonList([data, ...pokemonData]);
+        }
+        else
+          setPokemonList(pokemonData);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleFirstLoad = () => {
+    // setSearching(true);
+    fetch(`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${offset }`)
+      .then((response) => response.json())
+      .then((data) => {
+        // setSearching(false);
+        const pokemonUrls = data.results.map((entry) => entry.url);
+        fetchPokemonDetails(pokemonUrls, '');
+      })
+      .catch((error) => {
+        // setSearching(false);
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    if (pokemonList.length === 0) {
+      handleFirstLoad(); // Replace 'fire' with your desired Pokemon type
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run the effect only once on initial render
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -17,7 +87,7 @@ const ListingPage = ({ pokemonList, onLoadMore }) => {
   }, []);
 
   return (
-    <div className="flex">
+    <div className="flex flex-col w-full overflow-y-scroll bg-discord-cross-color break-words hidden-scrollbar">
       {pokemonList.map((pokemon) => (
         <div key={pokemon.id} className="grid-item">
           <img src={pokemon.sprites.front_default} alt={pokemon.name} />

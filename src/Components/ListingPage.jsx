@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import PokemonCard from "./PokemonCard";
 
-
 const ListingPage = () => {
   const [pokemonList, setPokemonList] = useState([]);
   const [offset, setOffset] = useState(0);
+
   const handleLoadMore = () => {
     setOffset((prev) => prev + 10);
     console.log(offset);
@@ -13,14 +13,17 @@ const ListingPage = () => {
   };
 
   const handleScroll = () => {
-    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-    if (scrollTop + clientHeight >= scrollHeight - 10) {
+    const { scrollTop, clientHeight, scrollHeight } =
+      document.getElementById("pokemonList");
+    if (scrollTop + clientHeight >= scrollHeight - 30) {
       handleLoadMore();
     }
   };
 
   const fetchNextPokemonDetails = (urls, data) => {
-    Promise.all(urls.map((url) => fetch(url).then((response) => response.json())))
+    Promise.all(
+      urls.map((url) => fetch(url).then((response) => response.json()))
+    )
       .then((pokemonData) => {
         setPokemonList([...pokemonList, ...pokemonData]);
       })
@@ -36,7 +39,7 @@ const ListingPage = () => {
       .then((data) => {
         // setSearching(false);
         const pokemonUrls = data.results.map((entry) => entry.url);
-        fetchNextPokemonDetails(pokemonUrls, '');
+        fetchNextPokemonDetails(pokemonUrls, "");
       })
       .catch((error) => {
         // setSearching(false);
@@ -45,14 +48,14 @@ const ListingPage = () => {
   };
 
   const fetchPokemonDetails = (urls, data) => {
-    Promise.all(urls.map((url) => fetch(url).then((response) => response.json())))
+    Promise.all(
+      urls.map((url) => fetch(url).then((response) => response.json()))
+    )
       .then((pokemonData) => {
-        if (data !== '') {
+        if (data !== "") {
           pokemonData = pokemonData.filter((value) => value.name !== data.name);
           setPokemonList([data, ...pokemonData]);
-        }
-        else
-          setPokemonList(pokemonData);
+        } else setPokemonList(pokemonData);
       })
       .catch((error) => {
         console.error(error);
@@ -61,12 +64,12 @@ const ListingPage = () => {
 
   const handleFirstLoad = () => {
     // setSearching(true);
-    fetch(`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${offset }`)
+    fetch(`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${offset}`)
       .then((response) => response.json())
       .then((data) => {
         // setSearching(false);
         const pokemonUrls = data.results.map((entry) => entry.url);
-        fetchPokemonDetails(pokemonUrls, '');
+        fetchPokemonDetails(pokemonUrls, "");
       })
       .catch((error) => {
         // setSearching(false);
@@ -78,19 +81,23 @@ const ListingPage = () => {
     if (pokemonList.length === 0) {
       handleFirstLoad(); // Replace 'fire' with your desired Pokemon type
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Run the effect only once on initial render
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    const pokemonListDiv = document.getElementById("pokemonList");
+    pokemonListDiv.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      pokemonListDiv.removeEventListener("scroll", handleScroll);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div className="flex flex-col w-2/6 h-screen overflow-y-scroll break-words hidden-scrollbar" id="pokemonList">
+    <div
+      className="flex flex-col w-2/6 h-screen overflow-y-scroll break-words hidden-scrollbar"
+      id="pokemonList"
+    >
       {/*  */}
       {pokemonList.map((pokemon) => (
         <PokemonCard pokemon={pokemon}></PokemonCard>

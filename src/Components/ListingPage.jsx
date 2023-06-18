@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import PokemonCard from "./PokemonCard";
+
 
 const ListingPage = () => {
   const [pokemonList, setPokemonList] = useState([]);
@@ -87,12 +89,14 @@ const ListingPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col w-full overflow-y-scroll bg-discord-cross-color break-words hidden-scrollbar">
+    <div className="flex flex-col w-2/6 h-screen overflow-y-scroll break-words hidden-scrollbar">
+      {/*  */}
       {pokemonList.map((pokemon) => (
-        <div key={pokemon.id} className="grid-item">
-          <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-          <p>{pokemon.name}</p>
-        </div>
+        <PokemonCard pokemon={pokemon}></PokemonCard>
+        // <div key={pokemon.id} className="grid-item">
+        //   <img src={pokemon.sprites.front_default} alt={pokemon.name} />
+        //   <p>{pokemon.name}</p>
+        // </div>
       ))}
     </div>
   );

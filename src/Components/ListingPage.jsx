@@ -7,6 +7,7 @@ const ListingPage = () => {
   const [offset, setOffset] = useState(0);
   const handleLoadMore = () => {
     setOffset((prev) => prev + 10);
+    console.log(offset);
     handleListingLoad();
     // Implement logic to load more Pokemon using API
   };
@@ -89,7 +90,7 @@ const ListingPage = () => {
   }, []);
 
   return (
-    <div className="flex flex-col w-2/6 h-screen overflow-y-scroll break-words hidden-scrollbar">
+    <div className="flex flex-col w-2/6 h-screen overflow-y-scroll break-words hidden-scrollbar" id="pokemonList">
       {/*  */}
       {pokemonList.map((pokemon) => (
         <PokemonCard pokemon={pokemon}></PokemonCard>

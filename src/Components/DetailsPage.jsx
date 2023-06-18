@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 const DetailsPage = ({ pokemon, onBookmark }) => {
-  console.log(pokemon);
   const [bookmarked, setBookmarked] = useState(false);
 
   const handleBookmark = () => {

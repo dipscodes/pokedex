@@ -5,6 +5,13 @@ import DetailsTabs from "./DetailsTabs";
 const DetailsPage = ({ pokemon, handleRefresh }) => {
   const [bookmarked, setBookmarked] = useState(false);
   const pokemonID = pokemon.id;
+  const getConcatenatedPokemonTypes = (types) => {
+    let concatenatedTypes = "";
+    types.forEach((element, index) => {
+        concatenatedTypes += capatalize(element.type.name) + ((index !== types.length - 1)? ", " : "");
+    });
+    return concatenatedTypes;
+  }
 
   const capatalize = (string) => {
     return string[0].toUpperCase() + string.substring(1);
@@ -53,6 +60,7 @@ const DetailsPage = ({ pokemon, handleRefresh }) => {
       </div>
       <div className="flex flex-row justify-center mt-5">
         <div className="w-10/12 flex flex-row justify-around px-10">
+          <div>Types: {getConcatenatedPokemonTypes(pokemon.types)}</div>
           <div>Height: {pokemon.height}</div>
           <div>Weight: {pokemon.weight}</div>
           <div>Order: {pokemon.order}</div>

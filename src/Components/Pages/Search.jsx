@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FcSearch } from "react-icons/fc"
 import PokemonCard from "../PokemonCard";
 import DetailsPage from "../DetailsPage";
+import loading from "../loading.svg";
 
 
 export default function Search() {
@@ -33,10 +34,6 @@ export default function Search() {
       });
   }
 
-  const onClickPokemonCard = (pokemon) => {
-    setPokemon(pokemon);
-  }
-
   return (
     <div className="flex flex-col w-full h-screen bg-discord-text-color-1">
       <div className="flex flex-row justify-center shadow-sm shadow-black h-[80px] bg-discord-tertiary items-center min-h-[80px]">
@@ -58,7 +55,9 @@ export default function Search() {
       </div>
       <div className="w-full">
         {searching ? (
-          <p>Loading...</p>
+          <div className='h-full w-full flex flex-row justify-center items-center'>
+            <img src={loading} alt="loading"/>
+          </div>
         ) : (
           <>
             <PokemonCard pokemon={pokemon}></PokemonCard>

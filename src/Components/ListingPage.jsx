@@ -96,7 +96,7 @@ const ListingPage = ({ setPokemon }) => {
 
   return (
     <div
-      className="flex flex-col w-2/6 h-screen overflow-y-scroll break-words hidden-scrollbar"
+      className="flex flex-col w-2/6 h-screen overflow-y-scroll break-words hidden-scrollbar bg-discord-text-color-1 border-r-2 border-solid border-gray-400"
       id="pokemonList"
     >
       {pokemonList.map((pokemon) => (

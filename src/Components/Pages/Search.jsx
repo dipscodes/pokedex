@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FcSearch } from "react-icons/fc"
 import PokemonCard from "../PokemonCard";
+import DetailsPage from "../DetailsPage";
 
 
 export default function Search() {
@@ -23,7 +24,6 @@ export default function Search() {
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setPokemon(data);
         setSearching(false);
       })
@@ -33,9 +33,13 @@ export default function Search() {
       });
   }
 
+  const onClickPokemonCard = (pokemon) => {
+    setPokemon(pokemon);
+  }
+
   return (
-    <div className="flex flex-col w-full">
-      <div className="flex flex-row justify-center shadow-sm shadow-black h-[80px] bg-discord-tertiary items-center">
+    <div className="flex flex-col w-full h-screen bg-discord-text-color-1">
+      <div className="flex flex-row justify-center shadow-sm shadow-black h-[80px] bg-discord-tertiary items-center min-h-[80px]">
         <input
           type="text"
           value={pokemonName}
@@ -60,6 +64,9 @@ export default function Search() {
             <PokemonCard pokemon={pokemon}></PokemonCard>
           </>
         )}
+      </div>
+      <div className="w-full h-auto overflow-y-scroll">
+        <DetailsPage pokemon={pokemon}></DetailsPage>
       </div>
     </div>
   );

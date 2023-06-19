@@ -10,8 +10,8 @@ export default function Listing() {
   return (
     <div className="w-screen h-screen flex flex-row">
       <ListingPage setPokemon={onClickPokemonCard}></ListingPage>
-      <div className="w-4/6 h-screen">
-        <DetailsPage pokemon={pokemon}></DetailsPage>
+      <div className="w-4/6 h-screen bg-discord-text-color-1 overflow-y-scroll">
+        <DetailsPage key={pokemon.name} pokemon={pokemon}></DetailsPage>
       </div>
     </div>
   );

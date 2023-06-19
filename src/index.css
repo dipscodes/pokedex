@@ -30,3 +30,16 @@ code {
   width: 100%;
   height: auto;
 }
+
+/* .hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+} */
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.active-tab {
+  background-color: #1e1f22;
+  color: #dbdee1;
+}

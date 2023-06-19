@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import PokemonCard from "./PokemonCard";
 
-const ListingPage = ({ setPokemon }) => {
+const ListingPage = ({ setPokemon, fetchPokemonList }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [offset, setOffset] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (fetchPokemonList) setPokemonList(fetchPokemonList);
+  }, [fetchPokemonList]);
 
   useEffect(() => {
     if(offset > 0 && isLoading) {

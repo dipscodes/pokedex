@@ -7,9 +7,9 @@ export default function Listing() {
   const [abilitiesList, setAbilitiesList] = useState([]);
   const [habitatList, setHabitatList] = useState([]);
   const [eggGroup, setEggGroup] = useState([]);
+  const [pokemonList, setPokemonList] = useState(null);
   const onClickPokemonCard = (pokemon) => {
     setPokemon(pokemon);
-    console.log(pokemon);
   };
 
   const onSearch = () => {
@@ -41,7 +41,17 @@ export default function Listing() {
 
       let commonElements = pokemonsByAbility.filter(element => pokemonsByHabitat.includes(element));
       commonElements = commonElements.filter(element => pokemonsByEggGroup.includes(element));
-      console.log(commonElements);
+
+      const commonPokemons = await Promise.all(commonElements.map(async (pokemonName) => {
+        const pokemonData = await (async () => {
+          const apiResponseByPokemonName = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+          const apiResponseInJson = await apiResponseByPokemonName.json();
+          return apiResponseInJson;
+        })();
+        return pokemonData;
+      }));
+
+      setPokemonList(commonPokemons);
     })();
   }
 
@@ -113,7 +123,7 @@ export default function Listing() {
       </div>
 
       <div className="flex flex-row">
-        <ListingPage setPokemon={onClickPokemonCard}></ListingPage>
+        <ListingPage fetchPokemonList={pokemonList} setPokemon={onClickPokemonCard}></ListingPage>
         <div className="w-4/6 bg-discord-text-color-1 overflow-y-scroll">
           <DetailsPage key={pokemon.name} pokemon={pokemon}></DetailsPage>
         </div>

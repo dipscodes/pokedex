@@ -10,10 +10,12 @@ const DetailsPage = ({ pokemon }) => {
 
   return (
     (JSON.stringify(pokemon) !== '{}') ? (
-      <div>
-      <h2>{pokemon.name}</h2>
-      <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-    </div>
+      <div className="w-full bg-black">
+        <div>
+          {pokemon.name}
+        </div>
+        <div></div>
+      </div>
     ) : (
       <></>
     )

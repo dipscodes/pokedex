@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import PokemonCard from "./PokemonCard";
 
-const ListingPage = () => {
+const ListingPage = ({ setPokemon }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [offset, setOffset] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,16 +40,13 @@ const ListingPage = () => {
   };
 
   const handleListingLoad = () => {
-    // setSearching(true);
     fetch(`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${offset}`)
       .then((response) => response.json())
       .then((data) => {
-        // setSearching(false);
         const pokemonUrls = data.results.map((entry) => entry.url);
         fetchNextPokemonDetails(pokemonUrls, "");
       })
       .catch((error) => {
-        // setSearching(false);
         console.error(error);
       });
   };
@@ -70,16 +67,13 @@ const ListingPage = () => {
   };
 
   const handleFirstLoad = () => {
-    // setSearching(true);
     fetch(`https://pokeapi.co/api/v2/pokemon?limit=10&offset=${offset}`)
       .then((response) => response.json())
       .then((data) => {
-        // setSearching(false);
         const pokemonUrls = data.results.map((entry) => entry.url);
         fetchPokemonDetails(pokemonUrls, "");
       })
       .catch((error) => {
-        // setSearching(false);
         console.error(error);
       });
   };
@@ -89,7 +83,7 @@ const ListingPage = () => {
       handleFirstLoad(); // Replace 'fire' with your desired Pokemon type
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Run the effect only once on initial render
+  }, []);
 
   useEffect(() => {
     const pokemonListDiv = document.getElementById("pokemonList");
@@ -105,13 +99,8 @@ const ListingPage = () => {
       className="flex flex-col w-2/6 h-screen overflow-y-scroll break-words hidden-scrollbar"
       id="pokemonList"
     >
-      {/*  */}
       {pokemonList.map((pokemon) => (
-        <PokemonCard pokemon={pokemon}></PokemonCard>
-        // <div key={pokemon.id} className="grid-item">
-        //   <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-        //   <p>{pokemon.name}</p>
-        // </div>
+        <PokemonCard key={pokemon.id} pokemon={pokemon} onClickPokemonCard={() => setPokemon(pokemon)} ></PokemonCard>
       ))}
     </div>
   );

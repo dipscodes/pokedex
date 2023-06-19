@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
-const DetailsPage = ({ pokemon, onBookmark }) => {
+const DetailsPage = ({ pokemon }) => {
   const [bookmarked, setBookmarked] = useState(false);
 
-  const handleBookmark = () => {
-    setBookmarked(!bookmarked);
-    onBookmark(pokemon);
-  };
+  // const handleBookmark = () => {
+  //   setBookmarked(!bookmarked);
+  //   onBookmark(pokemon);
+  // };
 
   return (
     (JSON.stringify(pokemon) !== '{}') ? (

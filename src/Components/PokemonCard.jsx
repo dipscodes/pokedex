@@ -1,4 +1,4 @@
-const PokemonCard = ({ pokemon }) => {  
+const PokemonCard = ({ pokemon, onClickPokemonCard }) => {  
   const getConcatenatedPokemonTypes = () => {
     let concatenatedTypes = "";
     pokemon.types.forEach(element => {
@@ -10,8 +10,8 @@ const PokemonCard = ({ pokemon }) => {
   return (
     (JSON.stringify(pokemon) !== '{}') ? 
     (<div className="flex flex-row justify-center my-3">
-        <div className="w-2/4 bg-white h-[150px] flex flex-row items-center border-discord-sidebar border-solid rounded-lg border-2 cursor-pointer">
-            <div className="w-2/6 flex justify-center border-r-2 border-gray-400 border-solid">
+        <div className="w-[400px] bg-white h-[150px] flex flex-row items-center border-discord-sidebar border-solid rounded-lg border-2 cursor-pointer" onClick={() => onClickPokemonCard()}>
+            <div className="w-2/6 h-16 flex justify-center border-r-2 border-gray-400 border-solid items-center">
                 <img
                 src={pokemon.sprites.front_default}
                 alt={pokemon.name}

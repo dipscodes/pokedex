@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FcSearch } from "react-icons/fc"
-import DetailsPage from "../DetailsPage";
 import PokemonCard from "../PokemonCard";
 
 

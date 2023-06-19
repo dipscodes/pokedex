@@ -7,7 +7,7 @@ function TabView({ tab, pokemonData }) {
       return (
         <ul>
           {pokemonData.abilities.map((abilityObj) => {
-            return <li>{capatalize(abilityObj.ability.name)}</li>;
+            return <li key={abilityObj.ability.name}>{capatalize(abilityObj.ability.name)}</li>;
           })}
         </ul>
       );
@@ -15,7 +15,7 @@ function TabView({ tab, pokemonData }) {
       return (
         <ul>
           {pokemonData.moves.map((pokemonMoveObj) => {
-            return <li>{capatalize(pokemonMoveObj.move.name)}</li>;
+            return <li key={pokemonMoveObj.move.name}>{capatalize(pokemonMoveObj.move.name)}</li>;
           })}
         </ul>
       );
@@ -23,7 +23,7 @@ function TabView({ tab, pokemonData }) {
       return (
         <ul>
           {pokemonData.held_items.map((heldItemObj) => {
-            return <li>{capatalize(heldItemObj.item.name)}</li>;
+            return <li key={heldItemObj.item.name}>{capatalize(heldItemObj.item.name)}</li>;
           })}
         </ul>
       );

@@ -4,12 +4,19 @@ import PokemonCard from "./PokemonCard";
 const ListingPage = () => {
   const [pokemonList, setPokemonList] = useState([]);
   const [offset, setOffset] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if(offset > 0 && isLoading) {
+      handleListingLoad();
+      setIsLoading(false);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offset]);
 
   const handleLoadMore = () => {
+    setIsLoading(true);
     setOffset((prev) => prev + 10);
-    console.log(offset);
-    handleListingLoad();
-    // Implement logic to load more Pokemon using API
   };
 
   const handleScroll = () => {

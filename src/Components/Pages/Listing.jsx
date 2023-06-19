@@ -12,6 +12,39 @@ export default function Listing() {
     console.log(pokemon);
   };
 
+  const onSearch = () => {
+    const ability = document.getElementById('ability').value;
+    const eggGroup = document.getElementById('egggroup').value;
+    const habitat = document.getElementById('habitat').value;
+
+    (async () => {
+      const searchedAbilityResp = await fetch(
+        `https://pokeapi.co/api/v2/ability/${ability}`,
+        { method: "GET" }
+      );
+      const searchedHabitatResp = await fetch(
+        `https://pokeapi.co/api/v2/pokemon-habitat/${habitat}`,
+        { method: "GET" }
+      );
+      const searchedEggGroupResp = await fetch(
+        `https://pokeapi.co/api/v2/egg-group/${eggGroup}`,
+        { method: "GET" }
+      );
+      
+      const abilitiesJSON = await searchedAbilityResp.json();
+      const habitatListJSON = await searchedHabitatResp.json();
+      const eggGroupJson = await searchedEggGroupResp.json();
+
+      const pokemonsByAbility = abilitiesJSON.pokemon.map((pokemon) => pokemon.pokemon.name);
+      const pokemonsByHabitat = habitatListJSON.pokemon_species.map((pokemon) => pokemon.name);
+      const pokemonsByEggGroup = eggGroupJson.pokemon_species.map((pokemon) => pokemon.name);
+
+      let commonElements = pokemonsByAbility.filter(element => pokemonsByHabitat.includes(element));
+      commonElements = commonElements.filter(element => pokemonsByEggGroup.includes(element));
+      console.log(commonElements);
+    })();
+  }
+
   useEffect(() => {
     (async () => {
       const abilitiesPromise = await fetch(
@@ -63,15 +96,18 @@ export default function Listing() {
         <div className="h-[80px] flex flex-row justify-center w-auto text-slate-200">
           <div className="flex flex-row items-center">
             <span className="mr-6">Ability: </span>
-            <select className="bg-discord-secondary mr-6">{abilitiesList}</select>
+            <select id="ability" className="bg-discord-secondary mr-6">{abilitiesList}</select>
           </div>
           <div className="flex flex-row items-center">
             <span className="mr-6">Habitat:</span>
-            <select className="bg-discord-secondary mr-6">{habitatList}</select>
+            <select id='habitat' className="bg-discord-secondary mr-6">{habitatList}</select>
           </div>
           <div className="flex flex-row items-center">
             <span className="mr-6">Egg Groups:</span>
-            <select className="bg-discord-secondary mr-6">{eggGroup}</select>
+            <select id="egggroup" className="bg-discord-secondary mr-6">{eggGroup}</select>
+          </div>
+          <div className="flex flex-row items-center">
+            <button className="bg-discord-button-color hover:bg-discord-button-color-hover text-white font-bold py-2 px-4 rounded-full transition-all duration-100 ease-linear shadow-md hover:shadow-sm" onClick={() => onSearch()}>Search</button>
           </div>
         </div>
       </div>

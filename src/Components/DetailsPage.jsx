@@ -40,7 +40,7 @@ const DetailsPage = ({ pokemon, handleRefresh }) => {
   };
 
   return JSON.stringify(pokemon) !== "{}" ? (
-    <div className="hidden-scrollbar w-full h-auto bg-discord-text-color-1 flex flex-col pt-10">
+    <div className="hidden-scrollbar w-full h-[calc(100vh-80px)] bg-discord-text-color-1 flex flex-col pt-10">
       <div className="flex flex-row justify-center">
         <img
           src={pokemon.sprites.other.dream_world.front_default}

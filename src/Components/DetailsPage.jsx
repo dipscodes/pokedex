@@ -58,7 +58,7 @@ const DetailsPage = ({ pokemon, handleRefresh }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-row justify-center mt-5">
+      {/* <div className="flex flex-row justify-center mt-5">
         <div className="w-10/12 flex flex-row justify-around px-10">
           <div>Types: {getConcatenatedPokemonTypes(pokemon.types)}</div>
           <div>Height: {pokemon.height}</div>
@@ -66,7 +66,7 @@ const DetailsPage = ({ pokemon, handleRefresh }) => {
           <div>Order: {pokemon.order}</div>
           <div>Base Experience: {pokemon.base_experience}</div>
         </div>
-      </div>
+      </div> */}
       <DetailsTabs pokemon={pokemon}/>
     </div>
   ) : (

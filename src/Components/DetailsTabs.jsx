@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Moves from "./Tabs/Moves";
 import HeldItems from "./Tabs/HeldItems";
-import Abilities from "./Tabs/Abilities";
+import Stats from "./Tabs/Stats";
 import TabView from "./Tabs/TabView";
 import Basics from './Tabs/Basics';
 
@@ -29,7 +29,7 @@ const DetailsTabs = ({ pokemon }) => {
       <div className="flex flex-row justify-center mt-5">
         <div className="changeable-tabs flex flex-row w-10/12 justify-between ">
           <Basics changeTab={changeTab} />
-          <Abilities changeTab={changeTab} />
+          <Stats changeTab={changeTab} />
           <Moves changeTab={changeTab} />
           <HeldItems changeTab={changeTab} />
         </div>

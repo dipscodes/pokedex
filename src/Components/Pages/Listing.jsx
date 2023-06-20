@@ -17,65 +17,68 @@ export default function Listing() {
     const eggGroup = document.getElementById('egggroup').value;
     const habitat = document.getElementById('habitat').value;
 
-    (async () => {
-      let pokemonsByAbility = null;
-      let pokemonsByHabitat = null;
-      let pokemonsByEggGroup = null;
-      if (ability !== "None") {
-        const searchedAbilityResp = await fetch(
-          `https://pokeapi.co/api/v2/ability/${ability}`,
-          { method: "GET" }
-        );
-        const abilitiesJSON = await searchedAbilityResp.json();
-        pokemonsByAbility = abilitiesJSON.pokemon.map((pokemon) => pokemon.pokemon.name);
-      }
+    if (ability !== "None" || habitat !== "None" || eggGroup !== "None") {
+      (async () => {
+        let pokemonsByAbility = null;
+        let pokemonsByHabitat = null;
+        let pokemonsByEggGroup = null;
+        if (ability !== "None") {
+          const searchedAbilityResp = await fetch(
+            `https://pokeapi.co/api/v2/ability/${ability}`,
+            { method: "GET" }
+          );
+          const abilitiesJSON = await searchedAbilityResp.json();
+          pokemonsByAbility = abilitiesJSON.pokemon.map((pokemon) => pokemon.pokemon.name);
+        }
 
-      if (habitat !== "None") {
-        const searchedHabitatResp = await fetch(
-          `https://pokeapi.co/api/v2/pokemon-habitat/${habitat}`,
-          { method: "GET" }
-        );
-        const habitatListJSON = await searchedHabitatResp.json();
-        pokemonsByHabitat = habitatListJSON.pokemon_species.map((pokemon) => pokemon.name);
-      }
+        if (habitat !== "None") {
+          const searchedHabitatResp = await fetch(
+            `https://pokeapi.co/api/v2/pokemon-habitat/${habitat}`,
+            { method: "GET" }
+          );
+          const habitatListJSON = await searchedHabitatResp.json();
+          pokemonsByHabitat = habitatListJSON.pokemon_species.map((pokemon) => pokemon.name);
+        }
 
-      if (eggGroup !== "None") {
-        const searchedEggGroupResp = await fetch(
-          `https://pokeapi.co/api/v2/egg-group/${eggGroup}`,
-          { method: "GET" }
-        );
-        const eggGroupJson = await searchedEggGroupResp.json();
-        pokemonsByEggGroup = eggGroupJson.pokemon_species.map((pokemon) => pokemon.name);
-      }
+        if (eggGroup !== "None") {
+          const searchedEggGroupResp = await fetch(
+            `https://pokeapi.co/api/v2/egg-group/${eggGroup}`,
+            { method: "GET" }
+          );
+          const eggGroupJson = await searchedEggGroupResp.json();
+          pokemonsByEggGroup = eggGroupJson.pokemon_species.map((pokemon) => pokemon.name);
+        }
 
-      const listOfListsOfPokemons = [pokemonsByAbility, pokemonsByHabitat, pokemonsByEggGroup];
+        const listOfListsOfPokemons = [pokemonsByAbility, pokemonsByHabitat, pokemonsByEggGroup];
 
-      const validList = await Promise.all(listOfListsOfPokemons.map(async (pokemonName) => {
-        const pokemonData = await (() => {
-          if (pokemonName !== null) return pokemonName;
-          for (const itr of listOfListsOfPokemons) {
-            if (itr !== null) return itr;
-          }
-        })();
-        return pokemonData;
-      }));
+        const validList = await Promise.all(listOfListsOfPokemons.map(async (pokemonName) => {
+          const pokemonData = await (() => {
+            if (pokemonName !== null) return pokemonName;
+            for (const itr of listOfListsOfPokemons) {
+              if (itr !== null) return itr;
+            }
+          })();
+          return pokemonData;
+        }));
 
-      let commonElements = validList[0].filter(element => validList[1].includes(element));
-      commonElements = commonElements.filter(element => validList[2].includes(element));
+        let commonElements = validList[0].filter(element => validList[1].includes(element));
+        commonElements = commonElements.filter(element => validList[2].includes(element));
 
-      console.log(commonElements);
+        console.log(commonElements);
 
-      const commonPokemons = await Promise.all(commonElements.map(async (pokemonName) => {
-        const pokemonData = await (async () => {
-          const apiResponseByPokemonName = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
-          const apiResponseInJson = await apiResponseByPokemonName.json();
-          return apiResponseInJson;
-        })();
-        return pokemonData;
-      }));
+        const commonPokemons = await Promise.all(commonElements.map(async (pokemonName) => {
+          const pokemonData = await (async () => {
+            const apiResponseByPokemonName = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
+            const apiResponseInJson = await apiResponseByPokemonName.json();
+            return apiResponseInJson;
+          })();
+          return pokemonData;
+        }));
 
-      setPokemonList(commonPokemons);
-    })();
+        setPokemonList(commonPokemons);
+      })();
+    }
+
   }
 
   useEffect(() => {

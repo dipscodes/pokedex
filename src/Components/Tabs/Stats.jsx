@@ -1,13 +1,13 @@
-const Abilities = ({ changeTab }) => {
+const Stats = ({ changeTab }) => {
   return (
     <div
-      id="abilities"
+      id="stats"
       className="cursor-pointer text-center w-full pt-1 h-8"
       onClick={(e) => changeTab(e.target.id)}
     >
-      Abilities
+      Stats
     </div>
   );
 };
 
-export default Abilities;
+export default Stats;

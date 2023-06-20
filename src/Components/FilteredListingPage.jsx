@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import PokemonCard from "./PokemonCard";
-import loading from "./inf_loading.svg";
 
 const FilteredListingPage = ({ setPokemon, fetchPokemonList }) => {
   const [pokemonList, setPokemonList] = useState([]);

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PokemonCard from "./PokemonCard";
 import loading from "./inf_loading.svg";
 
-const ListingPage = ({ setPokemon, fetchPokemonList, isSearching }) => {
+const ListingPage = ({ setPokemon, fetchPokemonList }) => {
   const [pokemonList, setPokemonList] = useState([]);
   const [offset, setOffset] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +28,7 @@ const ListingPage = ({ setPokemon, fetchPokemonList, isSearching }) => {
     const { scrollTop, clientHeight, scrollHeight } =
       document.getElementById("pokemonList");
     if (scrollTop + clientHeight >= scrollHeight - 30) {
-      if (!isSearching) handleLoadMore();
+      handleLoadMore();
     }
   };
 

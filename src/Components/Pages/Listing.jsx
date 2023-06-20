@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ListingPage from "../ListingPage";
 import DetailsPage from "../DetailsPage";
 
@@ -9,7 +9,6 @@ export default function Listing() {
   const [eggGroup, setEggGroup] = useState([]);
   const [pokemonList, setPokemonList] = useState(null);
   const [refresh, setrefresh] = useState(0);
-  const searching = useRef(false);
   const onClickPokemonCard = (pokemon) => {
     setPokemon(pokemon);
   };
@@ -21,7 +20,6 @@ export default function Listing() {
 
     if (ability !== "None" || habitat !== "None" || eggGroup !== "None") {
       (async () => {
-        searching.current = true;
         let pokemonsByAbility = null;
         let pokemonsByHabitat = null;
         let pokemonsByEggGroup = null;
@@ -161,7 +159,7 @@ export default function Listing() {
       </div>
 
       <div className="flex flex-row">
-        <ListingPage key={refresh} fetchPokemonList={pokemonList} setPokemon={onClickPokemonCard} isSearching={searching.current}></ListingPage>
+        <ListingPage key={refresh} fetchPokemonList={pokemonList} setPokemon={onClickPokemonCard}></ListingPage>
         <div className="w-4/6 bg-discord-text-color-1 overflow-y-scroll">
           <DetailsPage key={pokemon.name} pokemon={pokemon}></DetailsPage>
         </div>

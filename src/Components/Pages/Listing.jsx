@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ListingPage from "../ListingPage";
 import DetailsPage from "../DetailsPage";
+import FilteredListingPage from "../FilteredListingPage";
 
 export default function Listing() {
   const [pokemon, setPokemon] = useState({});
@@ -9,9 +10,14 @@ export default function Listing() {
   const [eggGroup, setEggGroup] = useState([]);
   const [pokemonList, setPokemonList] = useState(null);
   const [refresh, setrefresh] = useState(0);
+  const [isSearching, setIsSearching] = useState(false);
   const onClickPokemonCard = (pokemon) => {
     setPokemon(pokemon);
   };
+  const handleRefresh = () => {
+    setrefresh((prev) => (prev + 1) % 2);
+    setIsSearching(false);
+  }
 
   const onSearch = () => {
     const ability = document.getElementById('ability').value;
@@ -19,6 +25,7 @@ export default function Listing() {
     const habitat = document.getElementById('habitat').value;
 
     if (ability !== "None" || habitat !== "None" || eggGroup !== "None") {
+      setIsSearching(true);
       (async () => {
         let pokemonsByAbility = null;
         let pokemonsByHabitat = null;
@@ -65,12 +72,12 @@ export default function Listing() {
         let commonElements = validList[0].filter(element => validList[1].includes(element));
         commonElements = commonElements.filter(element => validList[2].includes(element));
 
-        
+
 
         let commonPokemons = await Promise.all(commonElements.map(async (pokemonName) => {
           const pokemonData = await (async () => {
             const apiResponseByPokemonName = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
-            
+
             if (apiResponseByPokemonName.status === 404) {
               return null;
             }
@@ -153,13 +160,14 @@ export default function Listing() {
             <button className="bg-discord-button-color hover:bg-discord-button-color-hover text-white font-bold py-2 px-4 rounded-full transition-all duration-100 ease-linear shadow-md hover:shadow-sm" onClick={() => onSearch()}>Search</button>
           </div>
           <div className="flex flex-row items-center">
-            <button className="bg-discord-button-color hover:bg-discord-button-color-hover text-white font-bold py-2 px-4 rounded-full transition-all duration-100 ease-linear shadow-md hover:shadow-sm ml-5" onClick={() => setrefresh((prev) => (prev + 1) % 2)}>Refresh</button>
+            <button className="bg-discord-button-color hover:bg-discord-button-color-hover text-white font-bold py-2 px-4 rounded-full transition-all duration-100 ease-linear shadow-md hover:shadow-sm ml-5" onClick={() => handleRefresh()}>Refresh</button>
           </div>
         </div>
       </div>
 
       <div className="flex flex-row">
-        <ListingPage key={refresh} fetchPokemonList={pokemonList} setPokemon={onClickPokemonCard}></ListingPage>
+        {(isSearching) ? (<FilteredListingPage key={refresh} fetchPokemonList={pokemonList} setPokemon={onClickPokemonCard}></FilteredListingPage>) :
+          (<ListingPage key={refresh} fetchPokemonList={pokemonList} setPokemon={onClickPokemonCard}></ListingPage>)}
         <div className="w-4/6 bg-discord-text-color-1 overflow-y-scroll">
           <DetailsPage key={pokemon.name} pokemon={pokemon}></DetailsPage>
         </div>

@@ -40,6 +40,7 @@ code {
 }
 
 .active-tab {
-  background-color: #1e1f22;
-  color: #dbdee1;
+  background-color: #6d899c;
+  /* color: #dbdee1; */
+  color: seashell;
 }

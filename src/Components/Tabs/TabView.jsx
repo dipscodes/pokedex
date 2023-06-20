@@ -27,9 +27,11 @@ function TabView({ tab, pokemonData }) {
           })}
         </ul>
       );
+    } else if(tab === 'basics') {
+      return <div className="">'hello there'</div>;
     }
   }
-  return <div>{dataToVisualize()}</div>;
+  return <div className="border-solid border-text-generic-color-muted w-10/12 border-t-2">{dataToVisualize()}</div>;
 }
 
 export default TabView;

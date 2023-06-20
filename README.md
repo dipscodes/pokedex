@@ -2,4 +2,4 @@
 
 ## Assumptions
 
-### I have seperated search, listing and bookmark pages in a SPA.
+### I have separated search, listing and bookmark pages in a SPA.

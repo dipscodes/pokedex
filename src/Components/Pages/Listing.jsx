@@ -18,29 +18,52 @@ export default function Listing() {
     const habitat = document.getElementById('habitat').value;
 
     (async () => {
-      const searchedAbilityResp = await fetch(
-        `https://pokeapi.co/api/v2/ability/${ability}`,
-        { method: "GET" }
-      );
-      const searchedHabitatResp = await fetch(
-        `https://pokeapi.co/api/v2/pokemon-habitat/${habitat}`,
-        { method: "GET" }
-      );
-      const searchedEggGroupResp = await fetch(
-        `https://pokeapi.co/api/v2/egg-group/${eggGroup}`,
-        { method: "GET" }
-      );
-      
-      const abilitiesJSON = await searchedAbilityResp.json();
-      const habitatListJSON = await searchedHabitatResp.json();
-      const eggGroupJson = await searchedEggGroupResp.json();
+      let pokemonsByAbility = null;
+      let pokemonsByHabitat = null;
+      let pokemonsByEggGroup = null;
+      if (ability !== "None") {
+        const searchedAbilityResp = await fetch(
+          `https://pokeapi.co/api/v2/ability/${ability}`,
+          { method: "GET" }
+        );
+        const abilitiesJSON = await searchedAbilityResp.json();
+        pokemonsByAbility = abilitiesJSON.pokemon.map((pokemon) => pokemon.pokemon.name);
+      }
 
-      const pokemonsByAbility = abilitiesJSON.pokemon.map((pokemon) => pokemon.pokemon.name);
-      const pokemonsByHabitat = habitatListJSON.pokemon_species.map((pokemon) => pokemon.name);
-      const pokemonsByEggGroup = eggGroupJson.pokemon_species.map((pokemon) => pokemon.name);
+      if (habitat !== "None") {
+        const searchedHabitatResp = await fetch(
+          `https://pokeapi.co/api/v2/pokemon-habitat/${habitat}`,
+          { method: "GET" }
+        );
+        const habitatListJSON = await searchedHabitatResp.json();
+        pokemonsByHabitat = habitatListJSON.pokemon_species.map((pokemon) => pokemon.name);
+      }
 
-      let commonElements = pokemonsByAbility.filter(element => pokemonsByHabitat.includes(element));
-      commonElements = commonElements.filter(element => pokemonsByEggGroup.includes(element));
+      if (eggGroup !== "None") {
+        const searchedEggGroupResp = await fetch(
+          `https://pokeapi.co/api/v2/egg-group/${eggGroup}`,
+          { method: "GET" }
+        );
+        const eggGroupJson = await searchedEggGroupResp.json();
+        pokemonsByEggGroup = eggGroupJson.pokemon_species.map((pokemon) => pokemon.name);
+      }
+
+      const listOfListsOfPokemons = [pokemonsByAbility, pokemonsByHabitat, pokemonsByEggGroup];
+
+      const validList = await Promise.all(listOfListsOfPokemons.map(async (pokemonName) => {
+        const pokemonData = await (() => {
+          if (pokemonName !== null) return pokemonName;
+          for (const itr of listOfListsOfPokemons) {
+            if (itr !== null) return itr;
+          }
+        })();
+        return pokemonData;
+      }));
+
+      let commonElements = validList[0].filter(element => validList[1].includes(element));
+      commonElements = commonElements.filter(element => validList[2].includes(element));
+
+      console.log(commonElements);
 
       const commonPokemons = await Promise.all(commonElements.map(async (pokemonName) => {
         const pokemonData = await (async () => {
@@ -102,7 +125,7 @@ export default function Listing() {
 
   return (
     <div className="w-full h-screen flex flex-col">
-      <div className="topbar h-[80px] min-h-[80px] bg-discord-secondary"> 
+      <div className="topbar h-[80px] min-h-[80px] bg-discord-secondary">
         <div className="h-[80px] flex flex-row justify-center w-auto text-slate-200">
           <div className="flex flex-row items-center">
             <span className="mr-6">Ability: </span>

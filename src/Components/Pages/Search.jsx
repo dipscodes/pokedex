@@ -21,8 +21,17 @@ export default function Search() {
   };
 
   const onSearch = (pokemonName) => {
+    const errorDiv = document.getElementById('error-div');
+    errorDiv.style.display = 'none';
     setSearching(true);
+    setPokemon({});
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+      .then((response) => {
+        if(response.status === 404)
+          throw new Error('No pokemon found by name');
+        else
+          return response;
+      })
       .then((response) => response.json())
       .then((data) => {
         setPokemon(data);
@@ -30,7 +39,9 @@ export default function Search() {
       })
       .catch((error) => {
         setSearching(false);
-        console.error(error);
+        errorDiv.style.display = 'block';
+        errorDiv.innerText = JSON.stringify({message: "No Pokemon was found."});
+        console.log(error);
       });
   }
 
@@ -63,6 +74,7 @@ export default function Search() {
             <PokemonCard pokemon={pokemon}></PokemonCard>
           </>
         )}
+        <div id='error-div' className='hidden'></div>
       </div>
       <div className="w-full h-auto overflow-y-scroll">
         <DetailsPage pokemon={pokemon}></DetailsPage>

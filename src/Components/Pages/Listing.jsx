@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ListingPage from "../ListingPage";
 import DetailsPage from "../DetailsPage";
 
@@ -8,6 +8,8 @@ export default function Listing() {
   const [habitatList, setHabitatList] = useState([]);
   const [eggGroup, setEggGroup] = useState([]);
   const [pokemonList, setPokemonList] = useState(null);
+  const [refresh, setrefresh] = useState(0);
+  const searching = useRef(false);
   const onClickPokemonCard = (pokemon) => {
     setPokemon(pokemon);
   };
@@ -19,6 +21,7 @@ export default function Listing() {
 
     if (ability !== "None" || habitat !== "None" || eggGroup !== "None") {
       (async () => {
+        searching.current = true;
         let pokemonsByAbility = null;
         let pokemonsByHabitat = null;
         let pokemonsByEggGroup = null;
@@ -64,21 +67,27 @@ export default function Listing() {
         let commonElements = validList[0].filter(element => validList[1].includes(element));
         commonElements = commonElements.filter(element => validList[2].includes(element));
 
-        console.log(commonElements);
+        
 
-        const commonPokemons = await Promise.all(commonElements.map(async (pokemonName) => {
+        let commonPokemons = await Promise.all(commonElements.map(async (pokemonName) => {
           const pokemonData = await (async () => {
             const apiResponseByPokemonName = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
-            const apiResponseInJson = await apiResponseByPokemonName.json();
-            return apiResponseInJson;
+            
+            if (apiResponseByPokemonName.status === 404) {
+              return null;
+            }
+            else {
+              const apiResponseInJson = await apiResponseByPokemonName.json();
+              return apiResponseInJson;
+            }
           })();
           return pokemonData;
         }));
 
+        commonPokemons = commonPokemons.filter((elm) => elm !== null);
         setPokemonList(commonPokemons);
       })();
     }
-
   }
 
   useEffect(() => {
@@ -145,11 +154,14 @@ export default function Listing() {
           <div className="flex flex-row items-center">
             <button className="bg-discord-button-color hover:bg-discord-button-color-hover text-white font-bold py-2 px-4 rounded-full transition-all duration-100 ease-linear shadow-md hover:shadow-sm" onClick={() => onSearch()}>Search</button>
           </div>
+          <div className="flex flex-row items-center">
+            <button className="bg-discord-button-color hover:bg-discord-button-color-hover text-white font-bold py-2 px-4 rounded-full transition-all duration-100 ease-linear shadow-md hover:shadow-sm ml-5" onClick={() => setrefresh((prev) => (prev + 1) % 2)}>Refresh</button>
+          </div>
         </div>
       </div>
 
       <div className="flex flex-row">
-        <ListingPage fetchPokemonList={pokemonList} setPokemon={onClickPokemonCard}></ListingPage>
+        <ListingPage key={refresh} fetchPokemonList={pokemonList} setPokemon={onClickPokemonCard} isSearching={searching.current}></ListingPage>
         <div className="w-4/6 bg-discord-text-color-1 overflow-y-scroll">
           <DetailsPage key={pokemon.name} pokemon={pokemon}></DetailsPage>
         </div>

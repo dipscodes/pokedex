@@ -1,7 +1,6 @@
 import Page from './Page';
 import SidebarIcon from './SidebarIcon';
 import { useState, useRef } from 'react';
-// import { StatusContext } from 'renderer/Context';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { BsFillBookmarkCheckFill } from 'react-icons/bs';
 import { FaClipboardList } from 'react-icons/fa';

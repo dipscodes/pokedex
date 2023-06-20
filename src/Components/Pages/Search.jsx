@@ -41,7 +41,6 @@ export default function Search() {
         setSearching(false);
         errorDiv.style.display = 'block';
         errorDiv.innerText = JSON.stringify({message: "No Pokemon was found."});
-        console.log(error);
       });
   }
 

@@ -9,9 +9,9 @@ function TabView({ tab, pokemonData }) {
         `https://pokeapi.co/api/v2/pokemon-species/${pokemonData.name}`
       );
       const speciesDataInJson = await speciesResp.json();
-      console.log(speciesDataInJson);
       setExtraData(speciesDataInJson);
     })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const capatalize = (string) => {
@@ -41,15 +41,15 @@ function TabView({ tab, pokemonData }) {
   function dataToVisualize() {
     if (tab === "stats") {
       return (
-        <ul>
+        <div className="flex flex-col">
           {pokemonData.stats.map((statsObj) => {
             return (
-              <li key={capatalize(statsObj.stat.name)}>
-                {capatalize(statsObj.stat.name) + ": " + statsObj.base_stat}
-              </li>
+              <div key={capatalize(statsObj.stat.name)} className="w-[300px] flex flex-row justify-between">
+                <span>{capatalize(statsObj.stat.name)}</span> <span>{statsObj.base_stat}</span>
+              </div>
             );
           })}
-        </ul>
+        </div>
       );
     } else if (tab === "moves") {
       return (
@@ -79,32 +79,32 @@ function TabView({ tab, pokemonData }) {
       return JSON.stringify(extraData) !== "{}" ? (
         <div className="">
           <div className="about flex flex-col">
-            <div>
+            <div className="w-[300px] flex flex-row justify-between">
               <span>Order: </span> <span>{pokemonData.order}</span>
             </div>
-            <div>
+            <div className="w-[300px] flex flex-row justify-between">
               <span>Height: </span> <span>{pokemonData.height}</span>
             </div>
-            <div>
+            <div className="w-[300px] flex flex-row justify-between">
               <span>Weight: </span> <span>{pokemonData.weight}</span>
             </div>
-            <div>
-              <span>Shape: </span> <span>{extraData.shape.name}</span>
+            <div className="w-[300px] flex flex-row justify-between">
+              <span>Shape: </span> <span>{capatalize(extraData.shape.name)}</span>
             </div>
-            <div>
+            <div className="w-[300px] flex flex-row justify-between">
               <span>Base Experience: </span> <span>{pokemonData.base_experience}</span>
             </div>
-            <div>
+            <div className="w-[300px] flex flex-row justify-between">
               <span>Types: </span>{" "}
               <span>{getConcatenatedPokemonTypes(pokemonData.types)}</span>
             </div>
-            <div>
+            <div className="w-[300px] flex flex-row justify-between">
               <span>Abilities: </span>{" "}
               <span>
                 {getConcatenatedPokemonAbitlies(pokemonData.abilities)}
               </span>
             </div>
-            <div>
+            <div className="w-[300px] flex flex-row justify-between">
               <span>Evolves from: </span>{" "}
               <span>
                 {extraData.evolves_from_species
@@ -121,7 +121,7 @@ function TabView({ tab, pokemonData }) {
     }
   }
   return (
-    <div className="border-solid border-text-generic-color-muted w-10/12 border-t-2">
+    <div className="border-solid border-text-generic-color-muted w-10/12 border-t-2 flex flex-col items-center pt-5">
       {dataToVisualize()}
     </div>
   );

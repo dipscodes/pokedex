@@ -11,11 +11,9 @@ const DetailsTabs = ({ pokemon }) => {
   useEffect(() => {
     const activeTabClassName = "active-tab";
 
-    // remove the activated tab class;
     const activatedTab = document.getElementsByClassName("active-tab")[0];
     activatedTab.classList.remove(activeTabClassName);
 
-    // highlight the new tab where the active-tab class will go
     const tabToActivate = document.getElementById(tab);
     tabToActivate.classList.add(activeTabClassName);
   });
